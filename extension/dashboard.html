@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>投递看板 · 投递簿</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="dashboard.html" aria-label="投递簿首页">
+        <span class="mark">投</span>
+        <span class="brand-text">
+          <strong>投递簿</strong>
+          <small>JobLedger</small>
+        </span>
+      </a>
+      <div class="top-actions">
+        <button class="btn ghost email-btn" id="emailBtn" type="button">
+          <span class="email-dot" id="emailDot"></span>邮件同步
+        </button>
+        <button class="btn ghost" id="importBtn" type="button">导入</button>
+        <div class="menu-wrap">
+          <button class="btn ghost" id="exportBtn" type="button">导出 <span class="caret">▾</span></button>
+          <div class="menu hidden" id="exportMenu">
+            <button type="button" id="exportJson">JSON 备份</button>
+            <button type="button" id="exportCsv">CSV 表格</button>
+          </div>
+        </div>
+        <button class="btn primary" id="addBtn" type="button"><span>+</span> 添加投递</button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">APPLICATION LEDGER</div>
+          <h1>投递看板</h1>
+          <p id="heroSub">投完 5 秒记一笔，进度不再翻官网。</p>
+        </div>
+        <div class="hero-note">
+          <span class="pulse"></span>
+          所有数据只存在这台电脑
+        </div>
+      </section>
+
+      <section class="stats" id="stats" aria-label="投递统计"></section>
+
+      <section class="toolbar" id="toolbar">
+        <div class="search">
+          <span class="search-icon">⌕</span>
+          <input id="search" type="search" placeholder="搜索公司、岗位、备注" autocomplete="off">
+          <kbd>⌘ K</kbd>
+        </div>
+        <div class="filters" id="filters"></div>
+        <div class="toolbar-right">
+          <select class="select" id="sort" aria-label="排序">
+            <option value="updated">最近更新</option>
+            <option value="applied">投递时间</option>
+            <option value="company">公司名称</option>
+          </select>
+          <div class="view-toggle" role="group" aria-label="视图">
+            <button type="button" id="viewList" class="active">列表</button>
+            <button type="button" id="viewBoard">看板</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="listView" class="panel"></section>
+      <section id="boardView" class="board hidden"></section>
+
+      <section id="emptyState" class="empty hidden">
+        <div class="empty-art" aria-hidden="true">
+          <span class="paper p1"></span>
+          <span class="paper p2"></span>
+          <span class="paper p3"><span class="check">✓</span></span>
+        </div>
+        <h2>还没有投递记录</h2>
+        <p>去任意招聘页，点右下角「记投递」；也可以先手动添加一条，建立你的投递台账。</p>
+        <div class="empty-actions">
+          <button class="btn primary" id="emptyAdd" type="button">手动添加第一条</button>
+          <button class="btn ghost" id="emptyImport" type="button">导入备份</button>
+        </div>
+        <div class="empty-tip">数据默认只保存在本机，不会上传到任何服务器。</div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <span>投递簿 · JobLedger v0.5.0</span>
+      <span class="footer-sep">·</span>
+      <span>记录你的每一次投递，而不是被投递记录追着跑。</span>
+      <button class="text-danger" id="clearAll" type="button">清空全部数据</button>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop hidden" id="editModal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow" id="editKicker">EDIT RECORD</div>
+          <h2 id="editTitle">编辑投递</h2>
+        </div>
+        <button class="icon-btn" id="closeEdit" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="field">
+            <span>公司</span>
+            <input id="editCompany" type="text" maxlength="80" placeholder="例如：星河科技" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>岗位</span>
+            <input id="editRole" type="text" maxlength="120" placeholder="例如：前端工程师" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>状态</span>
+            <select id="editStatus"></select>
+          </label>
+          <label class="field">
+            <span>投递日期</span>
+            <input id="editApplied" type="date">
+          </label>
+          <label class="field full">
+            <span>链接</span>
+            <input id="editUrl" type="url" maxlength="2000" placeholder="https://…" autocomplete="off">
+          </label>
+          <label class="field full">
+            <span>备注</span>
+            <textarea id="editNotes" rows="3" maxlength="1000" placeholder="内推人、面试感受、待办事项…"></textarea>
+          </label>
+        </div>
+
+        <details class="jd-details hidden" id="jdDetails">
+          <summary>保存的职位描述</summary>
+          <pre id="editJd"></pre>
+        </details>
+
+        <div class="timeline" id="timeline"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn danger" id="deleteBtn" type="button">删除</button>
+        <div class="foot-actions">
+          <button class="btn ghost" id="cancelEdit" type="button">取消</button>
+          <button class="btn primary" id="saveEdit" type="button">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="emailModal">
+    <div class="modal-card email-card" role="dialog" aria-modal="true" aria-labelledby="emailTitle">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">EMAIL SYNC</div>
+          <h2 id="emailTitle">邮件自动同步</h2>
+        </div>
+        <button class="icon-btn" id="closeEmail" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="email-intro">
+          本地邮件服务会读取招聘通知邮件，按公司/岗位匹配记录并更新状态。服务只监听
+          <code>127.0.0.1</code>，邮件内容不会上传到任何云端。
+        </p>
+
+        <label class="toggle-row">
+          <input type="checkbox" id="emailEnabled">
+          <span>启用自动同步（每 5 分钟检查一次）</span>
+        </label>
+
+        <div class="email-section-title">邮箱 IMAP</div>
+        <div class="form-grid email-form">
+          <label class="field">
+            <span>IMAP 服务器</span>
+            <input id="emailImapHost" type="text" placeholder="imap.qq.com" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>端口</span>
+            <input id="emailImapPort" type="number" min="1" max="65535" placeholder="993">
+          </label>
+          <label class="field">
+            <span>邮箱账号</span>
+            <input id="emailImapUser" type="email" placeholder="you@qq.com" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>授权码（已保存则留空）</span>
+            <input id="emailImapPassword" type="password" placeholder="不是登录密码" autocomplete="off">
+          </label>
+          <label class="field full">
+            <span>邮箱文件夹</span>
+            <input id="emailImapMailbox" type="text" placeholder="INBOX">
+          </label>
+          <label class="field">
+            <span>首次回溯天数</span>
+            <input id="emailSearchDays" type="number" min="1" max="3650" placeholder="365">
+          </label>
+          <label class="field">
+            <span>最多读取邮件数</span>
+            <input id="emailMaxMessages" type="number" min="1" max="2000" placeholder="500">
+          </label>
+        </div>
+
+        <div class="email-section-title">大模型识别（可选）</div>
+        <label class="toggle-row llm-toggle">
+          <input type="checkbox" id="emailLlmEnabled">
+          <span>用大模型判断邮件状态和分类</span>
+        </label>
+        <div class="form-grid email-form">
+          <label class="field">
+            <span>API Base URL</span>
+            <input id="emailLlmBaseUrl" type="url" placeholder="https://api.deepseek.com/v1" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>模型</span>
+            <input id="emailLlmModel" type="text" placeholder="deepseek-chat" autocomplete="off">
+          </label>
+          <label class="field full">
+            <span>API Key（已保存则留空）</span>
+            <input id="emailLlmApiKey" type="password" placeholder="只保存在本机 config.json" autocomplete="off">
+          </label>
+        </div>
+        <p class="email-help">
+          启用后，新收到的招聘邮件正文会发送到你填写的模型 API 做分类；如果模型失败，会自动回退到关键词规则。
+        </p>
+
+        <div class="email-section-title">本地托盘服务</div>
+        <div class="form-grid email-form">
+          <label class="field full">
+            <span>服务地址</span>
+            <input id="emailUrl" type="url" placeholder="http://127.0.0.1:8787" autocomplete="off">
+          </label>
+          <label class="field full">
+            <span>访问令牌（可留空，需与托盘配置一致）</span>
+            <input id="emailToken" type="password" placeholder="可留空" autocomplete="off">
+          </label>
+        </div>
+
+        <div class="email-status" id="emailStatus" role="status"></div>
+
+        <div class="email-actions">
+          <button class="btn ghost" id="emailTest" type="button">测试连接</button>
+          <button class="btn ghost" id="emailReclassify" type="button">重新识别邮件</button>
+          <button class="btn ghost" id="emailCleanup" type="button">清理旧版邮件岗位</button>
+          <button class="btn" id="emailSyncNow" type="button">立即同步</button>
+        </div>
+
+        <p class="email-help">
+          第一次使用：先运行 <code>JobLedgerTray</code>（托盘图标），再回到这里填 IMAP
+          账号和授权码。保存后托盘会在后台同步，不需要开命令行窗口。
+        </p>
+      </div>
+      <div class="modal-foot">
+        <span class="email-footnote">自动同步只更新状态，不会自动投递</span>
+        <div class="foot-actions">
+          <button class="btn ghost" id="emailCancel" type="button">取消</button>
+          <button class="btn primary" id="emailSave" type="button">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <input id="importFile" type="file" accept=".json,application/json" hidden>
+
+  <script src="lib/core.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

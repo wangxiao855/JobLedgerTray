@@ -1,0 +1,25 @@
+# Local mailbox credentials and sync data
+mail-service/config.json
+mail-service/jobledger-mail.db
+mail-service/tray-error.log
+mail-service/test-config.json
+mail-service/test-empty.db
+
+# Local tray data (never in the repository)
+JobLedgerData/
+
+# Python / build artifacts
+__pycache__/
+*.pyc
+.build-tools/
+build/
+dist/
+*.spec
+
+# Local preview / browser profiles
+tests/.chrome-*/
+tests/*.png
+
+# OS files
+.DS_Store
+Thumbs.db

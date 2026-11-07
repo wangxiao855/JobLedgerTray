@@ -1,0 +1,232 @@
+/* Refero "Ui" inspired popup theme. */
+
+:root {
+  --ink: #0a0a0a;
+  --muted: #737373;
+  --faint: #a3a3a3;
+  --line: #e5e5e5;
+  --soft: #fafafa;
+  --accent: #0a0a0a;
+  --accent-dark: #000;
+  --mint: #0a0a0a;
+  --blue: #0a0a0a;
+}
+
+body {
+  background: #f5f5f5;
+  color: var(--ink);
+  font-family: Inter, "SF Pro Display", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.top {
+  padding: 16px 0 14px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, .94);
+}
+
+.brand {
+  gap: 10px;
+}
+
+.mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #0a0a0a;
+  color: #fff;
+  box-shadow: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.brand-text strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -.02em;
+}
+
+.brand-text small {
+  color: var(--faint);
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: .16em;
+}
+
+.icon {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--muted);
+}
+
+.icon:hover {
+  background: var(--soft);
+  color: var(--ink);
+}
+
+.card {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.card-head {
+  margin-bottom: 14px;
+}
+
+.eyebrow,
+.field label,
+.section-head > span:first-child {
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 650;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.pill {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 9px;
+  box-shadow: none;
+}
+
+.field {
+  gap: 4px;
+  margin-bottom: 11px;
+}
+
+.field input,
+.field select {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 11px;
+  box-shadow: none;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #0a0a0a;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(10, 10, 10, .06);
+}
+
+.field input::placeholder {
+  color: var(--faint);
+}
+
+.url {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.primary {
+  height: 36px;
+  border: 1px solid #0a0a0a;
+  border-radius: 8px;
+  background: #0a0a0a;
+  color: #fff;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.primary:hover {
+  background: #262626;
+  border-color: #262626;
+  box-shadow: none;
+}
+
+.hint {
+  color: var(--faint);
+  font-size: 9px;
+}
+
+.stats {
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.stat {
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.stat strong {
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -.04em;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.stat strong.warn,
+.stat strong.good {
+  color: var(--ink);
+}
+
+.recent {
+  margin-top: 14px;
+}
+
+.recent-list {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.recent-item {
+  border-bottom: 1px solid var(--line-soft, #efefef);
+}
+
+.avatar {
+  background: #f5f5f5;
+  color: #0a0a0a;
+  border: 1px solid var(--line);
+}
+
+.pill.job,
+.pill.success,
+.pill.manual {
+  border: 1px solid var(--line);
+  background: var(--soft);
+  color: var(--muted);
+}
+
+.empty-line {
+  color: var(--faint);
+  font-size: 10px;
+}
+
+.link {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.link:hover {
+  color: var(--ink);
+}
+
+footer {
+  color: var(--faint);
+  font-size: 8px;
+  border-top: 1px solid var(--line);
+}

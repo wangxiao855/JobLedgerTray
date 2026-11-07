@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>投递簿</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="popup-theme.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <span class="mark">投</span>
+        <div class="brand-text">
+          <strong>投递簿</strong>
+          <small>JobLedger</small>
+        </div>
+      </div>
+      <button class="icon" id="openDashboard" type="button" title="打开看板" aria-label="打开看板">↗</button>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="card-head">
+          <span class="eyebrow">当前页面</span>
+          <span class="pill" id="detect">识别中</span>
+        </div>
+
+        <div class="field">
+          <label for="company">公司</label>
+          <input id="company" type="text" maxlength="80" placeholder="例如：星河科技" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="role">岗位</label>
+          <input id="role" type="text" maxlength="120" placeholder="例如：前端工程师" autocomplete="off">
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="status">状态</label>
+            <select id="status"></select>
+          </div>
+          <div class="field">
+            <label for="notes">备注</label>
+            <input id="notes" type="text" maxlength="200" placeholder="可选" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="url" id="url">正在读取当前页面…</div>
+        <button class="primary" id="save" type="button">保存这次投递</button>
+        <p class="hint" id="hint"></p>
+      </section>
+
+      <section class="stats" aria-label="投递统计">
+        <div class="stat">
+          <strong id="statActive">0</strong>
+          <span>进行中</span>
+        </div>
+        <div class="stat">
+          <strong id="statFollow" class="warn">0</strong>
+          <span>待跟进</span>
+        </div>
+        <div class="stat">
+          <strong id="statOffer" class="good">0</strong>
+          <span>Offer</span>
+        </div>
+      </section>
+
+      <section class="recent">
+        <div class="section-head">
+          <span>最近记录</span>
+          <button class="link" id="openDashboard2" type="button">全部</button>
+        </div>
+        <div id="recentList" class="recent-list">
+          <div class="empty-line">还没有记录</div>
+        </div>
+      </section>
+    </main>
+
+    <footer>只保存在本机 · 不联网 · v0.5.0</footer>
+  </div>
+  <script src="lib/core.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

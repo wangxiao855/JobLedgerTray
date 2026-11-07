@@ -1,0 +1,18 @@
+{
+  "imap_host": "imap.qq.com",
+  "imap_port": 993,
+  "username": "you@qq.com",
+  "password": "邮箱授权码，不是登录密码",
+  "mailbox": "INBOX",
+  "search_days": 365,
+  "max_messages": 500,
+  "http_host": "127.0.0.1",
+  "http_port": 8787,
+  "token": "换成一串随机字符串",
+  "db_path": "jobledger-mail.db",
+  "llm_enabled": false,
+  "llm_base_url": "https://api.deepseek.com/v1",
+  "llm_api_key": "你的大模型 API Key",
+  "llm_model": "deepseek-chat",
+  "llm_timeout": 25
+}
